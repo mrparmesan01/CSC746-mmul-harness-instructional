@@ -9,18 +9,18 @@ const char* dgemm_desc = "Blocked dgemm.";
 * where A, B, and C are n-by-n matrices stored in row-major format.
 * On exit, A and B maintain their input values.
 */
-// void square_dgemm(int n, double* A, double* B, double* C) {
-//    for (int i = 0; i < n; i++) {
-//       for (int j = 0; j < n; j++) {
-//          double square_sum = C[i*n + j];
-//          for (int k = 0; k < n; k++) {
-//             // C[i, j] = C[i, j] + A[i, n] * B[n, j];
-//             square_sum += A[i*n + k] * B[k*n + j];
-//          }
-//          C[i*n + j] = square_sum;
-//       }
-//    }
-// }
+void square_dgemm(int n, double* A, double* B, double* C) {
+   for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+         double square_sum = C[i*n + j];
+         for (int k = 0; k < n; k++) {
+            // C[i, j] = C[i, j] + A[i, n] * B[n, j];
+            square_sum += A[i*n + k] * B[k*n + j];
+         }
+         C[i*n + j] = square_sum;
+      }
+   }
+}
 
 /* This routine copies a block from src to dest */
 void copy_block(double *dest, double *src, int n, int block_size) {
@@ -65,7 +65,7 @@ void square_dgemm_blocked(int n, int block_size, double* A, double* B, double* C
       for (int j = 0; j < total_block_size; j++) {
          // calculate this so we store it in register
          int Cpos = i * n * block_size + j * block_size;
-         copy_block(An.data(), &C[Cpos], n, block_size);
+         copy_block(Cn.data(), &C[Cpos], n, block_size);
 
          for (int k = 0; k < total_block_size; k++) {
             copy_block(An.data(), &A[(i * block_size * n) + (k * block_size)], n, block_size);
