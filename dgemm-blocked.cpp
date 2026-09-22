@@ -1,6 +1,6 @@
 #include <cmath>
 #include <vector>
-#include <memory>
+#include <cstring>
 
 const char* dgemm_desc = "Blocked dgemm.";
 
