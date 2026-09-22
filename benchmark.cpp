@@ -108,7 +108,7 @@ int main(int argc, char** argv)
            std::chrono::duration<double> elapsed = end_time - start_time;
 
 
-           printf("Problem size: %d, Time: %f seconds\n", n, elapsed.count());
+           printf("Elapsed Time: %f seconds\n", elapsed.count());
 
            reference_dgemm(n, 1.0 , Acopy, Bcopy, Ccopy);
 
