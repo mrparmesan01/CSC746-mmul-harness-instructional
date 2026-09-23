@@ -9,11 +9,10 @@ const char* dgemm_desc = "Basic implementation, three-loop dgemm.";
 void square_dgemm(int n, double* A, double* B, double* C) 
 {
    // insert your code here: implementation of basic matrix multiple
-   for (int i = 0; i < n; i++) { // rows
-      for (int j = 0; j < n; j++) { // columns
+   for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
          double square_sum = C[i*n + j];
          for (int k = 0; k < n; k++) {
-            // C[i, j] = C[i, j] + A[i, n] * B[n, j];
             square_sum += A[i*n + k] * B[k*n + j];
          }
          C[i*n + j] = square_sum;
