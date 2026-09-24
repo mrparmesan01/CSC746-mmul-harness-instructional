@@ -1,0 +1,44 @@
+Description:	Blocked dgemm.
+
+Working on problem size N=64
+Blocked DGEMM
+Elapsed Time: 0.001078 seconds
+Elapsed Time: 0.000174 seconds
+Elapsed Time: 0.000186 seconds
+Elapsed Time: 0.000226 seconds
+Working on problem size N=64
+Blocked DGEMM
+Elapsed Time: 0.000895 seconds
+Elapsed Time: 0.000147 seconds
+Elapsed Time: 0.000162 seconds
+Elapsed Time: 0.000204 seconds
+Working on problem size N=128
+Blocked DGEMM
+Elapsed Time: 0.007175 seconds
+Elapsed Time: 0.001099 seconds
+Elapsed Time: 0.001292 seconds
+Elapsed Time: 0.001591 seconds
+Working on problem size N=256
+Blocked DGEMM
+Elapsed Time: 0.058633 seconds
+Elapsed Time: 0.009047 seconds
+Elapsed Time: 0.009809 seconds
+Elapsed Time: 0.011642 seconds
+Working on problem size N=512
+Blocked DGEMM
+Elapsed Time: 0.499152 seconds
+Elapsed Time: 0.105014 seconds
+Elapsed Time: 0.091715 seconds
+Elapsed Time: 0.107430 seconds
+Working on problem size N=1024
+Blocked DGEMM
+Elapsed Time: 4.229681 seconds
+Elapsed Time: 0.745947 seconds
+Elapsed Time: 0.705107 seconds
+Elapsed Time: 0.916133 seconds
+Working on problem size N=2048
+Blocked DGEMM
+Elapsed Time: 41.300170 seconds
+Elapsed Time: 6.156877 seconds
+Elapsed Time: 5.897486 seconds
+Elapsed Time: 7.099573 seconds
