@@ -1,90 +1,70 @@
-# import matplotlib.pyplot as plt
-# import numpy as np
-# import pandas as pd
-
-# # 1. Load the raw timing data
-# data = {
-#     'N': [64, 64, 128, 256, 512, 1024, 2048],
-#     'Time': [0.000328, 0.000199, 0.003227, 0.039882, 0.578160, 6.126028, 71.132531]
-# }
-
-# df = pd.DataFrame(data)
-
-# # 2. Group by problem size N and calculate the mean runtime
-# df_grouped = df.groupby('N')['Time'].mean().reset_index()
-
-# # 3. Create the plot
-# plt.figure(figsize=(9, 6))
-# plt.plot(
-#     df_grouped['N'], 
-#     df_grouped['Time'], 
-#     marker='o', 
-#     linestyle='-', 
-#     color='royalblue', 
-#     linewidth=2, 
-#     markersize=8, 
-#     label='Mean Runtime'
-# )
-
-# # 4. Set logarithmic scales for better visualization of exponential growth
-# plt.xscale('log', base=2)
-# plt.yscale('log')
-
-# # 5. Styling, labels, and grid
-# plt.xlabel('Problem Size ($N$)', fontsize=12)
-# plt.ylabel('Elapsed Time (seconds - Log Scale)', fontsize=12)
-# plt.title('Algorithm Runtime vs. Problem Size ($N$)', fontsize=14, fontweight='bold')
-# plt.grid(True, which="both", ls="--", alpha=0.7)
-# plt.xticks(df_grouped['N'], labels=[str(n) for n in df_grouped['N']])
-# plt.legend(fontsize=11)
-# plt.tight_layout()
-
-# # 6. Display the plot
-# plt.show()
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-# 1. Load the raw timing data
-data = {
+basic_data = {
     'N': [64, 64, 128, 256, 512, 1024, 2048],
     'Time': [0.000328, 0.000199, 0.003227, 0.039882, 0.578160, 6.126028, 71.132531]
 }
+df_basic = pd.DataFrame(basic_data)
+df_basic_grouped = df_basic.groupby('N')['Time'].mean().reset_index()
 
-df = pd.DataFrame(data)
+# Calculate MFLOP/s for Basic: (2 * N^3) / (Time * 1e6)
+df_basic_grouped['Total_FLOPs'] = 2 * (df_basic_grouped['N'] ** 3)
+df_basic_grouped['MFLOPS'] = (df_basic_grouped['Total_FLOPs'] / df_basic_grouped['Time']) / 1e6
 
-# 2. Group by problem size N and calculate the mean runtime
-df_grouped = df.groupby('N')['Time'].mean().reset_index()
+blas_data = {
+    'N': [64, 64, 128, 256, 512, 1024, 2048],
+    'Time': [0.020380, 0.000033, 0.000253, 0.001683, 0.007093, 0.054468, 0.452343]
+}
+df_blas = pd.DataFrame(blas_data)
+df_blas_grouped = df_blas.groupby('N')['Time'].mean().reset_index()
 
-# 3. Create the plot
-plt.figure(figsize=(9, 6))
+# Calculate MFLOP/s for CBLAS
+df_blas_grouped['Total_FLOPs'] = 2 * (df_blas_grouped['N'] ** 3)
+df_blas_grouped['MFLOPS'] = (df_blas_grouped['Total_FLOPs'] / df_blas_grouped['Time']) / 1e6
+
+plt.figure(figsize=(10, 6))
+
+# Plot Basic MM curve
 plt.plot(
-    df_grouped['N'], 
-    df_grouped['Time'], 
+    df_basic_grouped['N'], 
+    df_basic_grouped['MFLOPS'], 
     marker='o', 
     linestyle='-', 
-    color='royalblue', 
+    color='crimson', 
     linewidth=2, 
     markersize=8, 
-    label='Mean Runtime'
+    label='Basic MM ($O(N^3)$)'
 )
 
-# 4. Set logarithmic scales for better visualization of exponential growth
+# Plot CBLAS curve
+plt.plot(
+    df_blas_grouped['N'], 
+    df_blas_grouped['MFLOPS'], 
+    marker='s', 
+    linestyle='--', 
+    color='forestgreen', 
+    linewidth=2, 
+    markersize=8, 
+    label='CBLAS Reference'
+)
+
 plt.xscale('log', base=2)
 plt.yscale('log')
 
-# 5. Styling, labels, and clean grid settings
 plt.xlabel('Problem Size ($N$)', fontsize=12)
-plt.ylabel('Elapsed Time (seconds - Log Scale)', fontsize=12)
-plt.title('Algorithm Runtime vs. Problem Size ($N$)', fontsize=14, fontweight='bold')
+plt.ylabel('Performance (MFLOP/s)', fontsize=12)
+plt.title('Basic Matrix Multiplication vs. CBLAS', fontsize=14, fontweight='bold')
 
-# Only show major gridlines with a subtle alpha for a cleaner look
+# Clean major-only gridlines with subtle opacity
 plt.grid(True, which="major", linestyle="--", alpha=0.4)
 
-plt.xticks(df_grouped['N'], labels=[str(n) for n in df_grouped['N']])
-plt.legend(fontsize=11)
+# Set ticks to match the exact problem sizes
+unique_n = df_basic_grouped['N']
+plt.xticks(unique_n, labels=[str(n) for n in unique_n])
+
+plt.legend(fontsize=11, loc='upper left')
 plt.tight_layout()
 
-# 6. Display the plot
 plt.show()
